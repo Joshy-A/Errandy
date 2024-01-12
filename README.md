@@ -1,4 +1,4 @@
-Errandy:
+#Errandy:
 The goal of building this application is to allow student in a university school run errands for each other with ease.
 
 =>Features/ Requirements:
