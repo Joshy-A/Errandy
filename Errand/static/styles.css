@@ -1,0 +1,71 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: Poppins;
+}
+
+body {
+    background-color: #f1ecec;
+}
+
+.container {
+    margin: 50px auto;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+
+.logo {
+    text-align: left;
+    font-size: 36px;
+    margin-left: 30px;
+    margin-top: 10px;
+    background-image: linear-gradient(45deg, #631a86 0%, #8884ff 46%);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    text-align: center;
+    font-size: 33px;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+input[type="name"],
+input[type="email"],
+input[type="password"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+input[type="submit"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    background-image: linear-gradient(45deg, #631a86 0%, #8884ff 100%);
+    cursor: pointer;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+input[type="submit"]:hover {
+    background-image: linear-gradient(45deg, #8884ff 0%, #631a86 100%);
+}
