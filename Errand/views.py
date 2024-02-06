@@ -10,17 +10,17 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    request = Request.query.all()
-    return render_template('home.html', request=request, user=current_user)
+    requests = Request.query.all()
+    return render_template('home.html', requests=requests, user=current_user)
 
 @views.route("/create", methods=['POST'])
 def create():   
     title = request.form['title']
     description = request.form['description']
     
-    request = Request(title=title, description=description, user_id=current_user.id)
+    requests = Request(title=title, description=description, user_id=current_user.id)
     
-    db.session.add(request)
+    db.session.add(requests)
     db.session.commit()
     flash('Request Successful!', category='success')
     return redirect(url_for('views.home'))

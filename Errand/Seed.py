@@ -1,4 +1,4 @@
-from app import create_app, db
+from .__init__ import create_app, db
 from .models import User, Request, Chat, Message
 
 app = create_app()
