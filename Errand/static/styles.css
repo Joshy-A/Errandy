@@ -69,3 +69,65 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-image: linear-gradient(45deg, #8884ff 0%, #631a86 100%);
 }
+
+.container {
+    margin-top: 20px;
+}
+
+.create-errand-form {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-errand-form input,
+.create-errand-form button {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.create-errand-form button {
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.create-errandy-form button:hover {
+    background-color: #218838;
+}
+
+.errand-container .errand-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.errand-container .errand-card {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 10px;
+    background-color: #fff;
+    width: 200px;
+}
+
+.errand-container .errand-card:hover {
+    background-color: #f0f0f0;
+}
+
+.errand-container {
+    margin-top: 20px;
+}
+
+.errand-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
