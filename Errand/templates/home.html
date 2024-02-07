@@ -1,23 +1,37 @@
+<div id="logo-container">
+  <h1 id="logo">ERRANDY</h1>
+</div>
 {% extends "index.html" %} {% block title %}Home{% endblock %} {% block content
   %}
-  <h1>ERRANDY</h1>
   <div class="errand-container">
     <div class="errand-grid">
       {% for request in requests %}
         <div class="errand-card">
           <span class="errand-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
           <span class="errand-title">{{ request.title }}</span>
+
+          <div class="request-buttons">
+            <form action="/message/{{ request.id }}" method="post" style="display: none;" id="editForm_{{ request.id }}">
+            </form>
+            
+            <a class="message-btn" href="#" onclick="sendMessage({{ request.id }})">Message</a>
+            
+            <!-- Delete Form -->
+            <form action="/delete/{{ request.id }}" method="post" style="display: inline;">
+                <button class="delete-btn" type="submit">Delete</button>
+            </form>
+          </div>
         </div>
       {% endfor %}
     </div>
   </div>
 
-  <form action="/create" method="post" class="create-errand-form">
+  <form action="/create" method="post" class="create-errand-form" id="create-errand-form">
     <input type="text" name="title" placeholder="Errand title">
     <input type="text" name="description" placeholder="Errand description">
     <button type="submit">Post Errand</button>
   </form>
-  <span class="material-symbols-outlined">
-    add_circle
-  </span>
+  
+  <img class="add-button" onclick="hideShow()" src="../static/add-button.svg" alt="add button"/>
+  <script src="../static/script.js"></script>
   {% endblock %}
