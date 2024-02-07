@@ -41,3 +41,20 @@ def delete_account():
         flash('User not found', category='error')
         return redirect(url_for('views.home'))
     
+@views.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    requests = Request.query.get_or_404(id)
+    
+    if requests.user != current_user:
+        flash('You cannot delete this request.', category='error')
+
+    else:
+        
+        db.session.delete(requests)
+        db.session.commit()
+        
+        flash('Requests Deleted!', category='success')
+    return redirect(url_for('views.home'))
+
+
+    

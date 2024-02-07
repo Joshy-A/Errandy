@@ -9,24 +9,19 @@ def seed_database():
 
         db.create_all()
 
-        user1 = User(username='user1', password='password1', email='user1@example.com')
-        user2 = User(username='user2', password='password2', email='user2@example.com')
-        db.session.add_all([user1, user2])
-        db.session.commit()
-
         user1 = User(
             email='pelumi@example.com',
-            password='Password@1',
             first_name='Pelumi',
             last_name='Awonuga',
         )
+        user1.set_password('Password@1')
 
         user2 = User(
             email='oluwafemi@example.com',
-            password='Password@2',
             first_name='Favour',
             last_name='Oluwafemi',
         )
+        user2.set_password('Password@2')
 
         db.session.add_all([user1, user2])
         db.session.commit()
