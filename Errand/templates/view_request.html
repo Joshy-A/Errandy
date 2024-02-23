@@ -1,0 +1,17 @@
+<h1 id="logo">ERRANDY</h1>
+{% extends "index.html" %} {% block title %}Login{% endblock %} {% block content
+  %}
+<div class="container">
+    <div class="request-buttons">
+        <form action="/message/{{ request.id }}" method="post" style="display: none;" id="editForm_{{ request.id }}">
+        </form>
+        
+        <a class="message-btn" href="#" onclick="sendMessage({{ request.id }})">Message</a>
+        
+        <!-- Delete Form -->
+        <form action="/delete/{{ request.id }}" method="post" style="display: inline;">
+            <button class="delete-btn" type="submit">Delete</button>
+        </form>
+      </div>
+</div>
+{% endblock %}

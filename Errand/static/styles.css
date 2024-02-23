@@ -18,6 +18,10 @@ body {
     border-radius: 20px;
 }
 
+.request-container {
+    margin: 0.88% 0 0 1.5%;   
+}
+
 #logo {
     text-align: left;
     font-weight: bolder;
@@ -87,12 +91,13 @@ input[type="password"] {
 
 .create-errand-form {
     display: none;
+    width: 23.79%;
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin: 5px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 .create-errand-form input,
@@ -123,7 +128,7 @@ input[type="password"] {
     margin: 5px;
     padding: 10px;
     background-color: #fff;
-    width: 200px;
+    width: 23.79%;
 }
 
 .errand-container .errand-card:hover {
