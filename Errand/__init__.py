@@ -1,17 +1,24 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_socketio import SocketIO
+from flask_cors import CORS
 from flask_login import LoginManager
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
 
+socket = SocketIO()
+cors = CORS()
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
+    socket.init_app(app, cors_allowed_origins="*")
+    cors.init_app(app)
 
     from .views import views
     from .auth import auth
@@ -32,7 +39,7 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    return app
+    return app, socket
 
 
 def create_database(app):

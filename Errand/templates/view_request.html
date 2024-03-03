@@ -1,17 +1,63 @@
 <h1 id="logo">ERRANDY</h1>
-{% extends "index.html" %} {% block title %}Login{% endblock %} {% block content
-  %}
+{% extends "index.html" %} {% block title %}view-Request{% endblock %} {% block content %}
 <div class="container">
-    <div class="request-buttons">
-        <form action="/message/{{ request.id }}" method="post" style="display: none;" id="editForm_{{ request.id }}">
-        </form>
-        
-        <a class="message-btn" href="#" onclick="sendMessage({{ request.id }})">Message</a>
-        
-        <!-- Delete Form -->
-        <form action="/delete/{{ request.id }}" method="post" style="display: inline;">
-            <button class="delete-btn" type="submit">Delete</button>
-        </form>
-      </div>
+  <h2>Request Details</h2>
+  <div class="errand-details">
+      <p><strong>Title:</strong> {{ request.title }}</p>
+      <p><strong>Description:</strong> {{ request.description }}</p>
+      <p><strong>Requested by:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
+  </div>
+  <div class="request-buttons">
+      <!-- Display the message button only if the current user is the responder -->
+      {% if current_user.is_authenticated and request.user.id != current_user.id %}
+      <form action="/message/{{ request.id }}" method="post">
+          <!-- Add inputs for composing and sending a message if needed -->
+          <button type="submit" class="message-btn">Message</button>
+      </form>
+      {% endif %}
+      <!-- Delete Form -->
+      {% if current_user.is_authenticated and request.user.id == current_user.id %}
+      <form action="/delete/{{ request.id }}" method="post">
+          <button type="submit" class="delete-btn">Delete</button>
+      </form>
+      {% endif %}
+  </div>
 </div>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script>
+    // Assuming you're using Socket.IO client for JavaScript
+    const socket = io();
+
+    // Function to join the chat room
+    function joinChat(roomId) {
+        socket.emit("join-chat", { room_id: roomId });
+    }
+
+    // Function to get the room ID from the current page URL
+    function getRoomIdFromPage() {
+      // Get the current page URL
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // Extract the room_id query parameter from the URL
+      const roomId = urlParams.get('rid');
+
+      return roomId;
+    }
+
+    // Event listener for the message button click
+    document.getElementById("message-btn").addEventListener("click", function() {
+        const roomId = getRoomIdFromPage(); // Implement this function to get the room ID from the page
+        joinChat(roomId);
+        // Redirect the user to the chat room page
+        window.location.href = `/chat/${roomId}`; // Assuming you have a chat page route
+    });
+
+    // Listen for the 'chat-created' event
+    socket.on('chat-created', function(data) {
+        const roomId = data.room_id;
+        joinChat(roomId);
+        // Redirect the user to the chat room page
+        window.location.href = `/chat/${roomId}`; // Assuming you have a chat page route
+    });
+</script> -->
 {% endblock %}

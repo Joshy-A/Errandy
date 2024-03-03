@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,13 +43,15 @@ class Chat(db.Model):
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     multimedia_url = db.Column(db.String(255))
     is_read = db.Column(db.Boolean, default=False)
-    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     chat = db.relationship('Chat', backref=db.backref('messages', lazy=True))
     sender = db.relationship('User', backref='messages_sent', lazy=True)
-    
-    
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 # There is possibility for somechanges to be made here 
