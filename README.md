@@ -16,18 +16,19 @@ Errandy is a mobile application designed to facilitate errand-running between st
 * **Integrated Chat:** Enables seamless communication between users. Users can discuss errand details, negotiate terms, and coordinate completion. 
 
 **Challenges**
+* **Integrating the Chat:**  
 
-* **Verification and Trust:** Ensuring users are legitimate students within the university might require collaboration with the university administration. Consider integrating verification processes or reputation systems to build user trust.
-* **Payment Integration (Optional):** If users wish to offer compensation for errands, consider integrating secure payment options like mobile wallets or university-approved payment systems.
-* **Location-Based Services:** Implementing location-based features to find nearby errands or suggest suitable runners would require careful consideration of user privacy and data security.
 
 **Future Implementations**
 
-* **Reputation System:** Develop a rating system where users can leave feedback for each other, fostering a sense of accountability and reliability.
-* **Task Categorization:** Allow users to categorize errands (e.g., pick-up/delivery, library tasks, printing services) for easier searching and filtering.
+* **Review System:** Develop a rating system where users can leave feedback for each other, fostering a sense of accountability and reliability.
+* **Errand Categorization:** Allow users to categorize errands (e.g., pick-up/delivery, library tasks, printing services) for easier searching and filtering.
 * **Advanced Search:** Implement search functionalities based on location, time frame, task category, or keywords in errand descriptions.
 * **Push Notifications:** Send real-time notifications to users for new requests, accepted tasks, or chat messages.
 * **Gamification Elements (Optional):** Consider incorporating gamification elements like points or badges to incentivize active participation and a sense of accomplishment.
+* **Payment Integration (Optional):** If users wish to offer compensation for errands, consider integrating secure payment options like mobile wallets or university-approved payment systems.
+* **Verification:** Ensuring users are legitimate students within the university might require collaboration with the university administration.
+* **Location-Based Services:** Implementing location-based features to find nearby errands or suggest suitable runners would require careful consideration of user privacy and data security.
 
 **How to Build**
 
