@@ -2,8 +2,7 @@ from flask import Blueprint, render_template, request, url_for, redirect, sessio
 from myapp.database import *
 # from functools import wraps
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import datetime
-
+from datetime import datetime, timezone
 import pandas as pd
 import matplotlib.pyplot as plt
 from myapp import socket
@@ -116,7 +115,7 @@ def send_message(request_id):
     # Retrieve the request associated with the given request_id
     request_obj = Request.query.get_or_404(request_id)
 
-    # Check if the current user is authenticated and has a valid email
+    # Ensure the current user is authenticated and has a valid email
     if not current_user.is_authenticated or not current_user.email:
         flash('You need to be authenticated with a valid email to send a message.', category='error')
         return redirect(url_for('views.home'))
@@ -124,39 +123,36 @@ def send_message(request_id):
     # Retrieve the email of the recipient from the request
     new_chat_email = request.form.get("requester_email")
 
-    # If user is trying to add themselves, do nothing
-    if new_chat_email == current_user.email:
-        return redirect(url_for("views.chat"))
-
     # Check if the recipient user exists
     recipient_user = User.query.filter_by(email=new_chat_email).first()
     if not recipient_user:
         flash('Recipient user does not exist.', category='error')
         return redirect(url_for("views.chat"))
 
-    # Call the new_chat function to create a new chat room
-    room_id = new_chat(new_chat_email)  # Pass the email to the new_chat function
+    # Call the new_chat function to create or retrieve the chat room
+    room_id = new_chat(new_chat_email)  # Assuming this function returns a valid room ID
 
-    # Now, proceed with sending the message
-    # Assuming you have a message content obtained from the request
-    message_content = "Hello, I can help you."
-    timestamp = datetime.now()
-    
+    # Retrieve the message content from the request
+    message_content = request.form.get("message_content")
+
+    # Generate the timestamp using UTC timezone
+    timestamp = datetime.now(timezone.utc)
+
     # Create a new chat message object
     new_message = ChatMessage(
         content=message_content,
-        timestamp=timestamp,  # Corrected spelling of timestamp
+        timestamp=timestamp,
         sender_id=current_user.id,
         sender_username=current_user.username,
         room_id=room_id
     )
-    
+
     # Save the message to the database
     db.session.add(new_message)
     db.session.commit()
 
+    # Redirect to the chat interface
     return redirect(url_for("views.chat"))
-
 
 # This route allows users to create a new chat room adding the email of a registered users
 @views.route("/new-chat", methods=["POST"])
@@ -227,7 +223,7 @@ def new_chat(new_chat_email):  # Accept the email as a parameter
 @login_required
 def chat():
     """
-    Renders the chat interface and displays chat messages.
+    Renders the chat interface and handles message submission.
 
     Returns:
         Response: Flask response object.
@@ -245,32 +241,23 @@ def chat():
 
     for chat in chat_list:
         # Query the database to get the username of users in a user's chat list
-        username = User.query.get(chat["user_id"]).username
-        is_active = room_id == chat["room_id"]
+        recipient_user = User.query.get(chat["user_id"])
+        if recipient_user:
+            username = recipient_user.username
+            is_active = room_id == chat["room_id"]
 
-        try:
-            # Get the Message object for the chat room
-            message = Message.query.filter_by(room_id=chat["room_id"]).first()
+            # Get the last message content for the chat room
+            last_message_content = get_last_message_content(chat["room_id"])
 
-            # Get the last ChatMessage object in the Message's messages relationship
-            last_message = message.messages[-1]
-
-            # Get the message content of the last ChatMessage object
-            last_message_content = last_message.content
-        except (AttributeError, IndexError):
-            # Set variable to this when no messages have been sent to the room
-            last_message_content = "This place is empty. No messages ..."
-
-        data.append({
-            "username": username,
-            "room_id": chat["room_id"],
-            "is_active": is_active,
-            "last_message": last_message_content,
-        })
+            data.append({
+                "username": username,
+                "room_id": chat["room_id"],
+                "is_active": is_active,
+                "last_message": last_message_content,
+            })
 
     # Get all the message history in a certain room
-    message_entry = Message.query.filter_by(room_id=room_id).first()
-    messages = message_entry.messages if message_entry else []
+    messages = get_message_history(room_id)
 
     if request.method == 'POST':
         # Get the content of the new message from the form
@@ -288,8 +275,8 @@ def chat():
             db.session.add(new_message)
             db.session.commit()
 
-            # Redirect back to the chat page to refresh the messages
-            return redirect(url_for('views.chat', rid=room_id))
+            # Return success response if using AJAX
+            return jsonify(success=True)
 
     return render_template(
         "chat.html",
@@ -299,6 +286,36 @@ def chat():
         messages=messages,
         user=current_user
     )
+
+def get_last_message_content(room_id):
+    """
+    Retrieve the content of the last message in a given chat room.
+
+    Args:
+        room_id (str): The ID of the chat room.
+
+    Returns:
+        str: The content of the last message.
+    """
+    message_entry = Message.query.filter_by(room_id=room_id).first()
+    if message_entry and message_entry.messages:
+        return message_entry.messages[-1].content
+    return "This place is empty. No messages ..."
+
+def get_message_history(room_id):
+    """
+    Retrieve all messages in a given chat room.
+
+    Args:
+        room_id (str): The ID of the chat room.
+
+    Returns:
+        list: A list of messages in the chat room.
+    """
+    message_entry = Message.query.filter_by(room_id=room_id).first()
+    if message_entry:
+        return message_entry.messages
+    return []
 
 # Custom time filter to be used in the jinja template
 @views.app_template_filter('ftime')

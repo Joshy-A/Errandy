@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timezone
 from passlib.hash import pbkdf2_sha256
 from flask_login import UserMixin
 from sqlalchemy import func 
@@ -56,9 +56,7 @@ class Message(db.Model):
 class ChatMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(400))
-    # timestamp = db.Column(db.TIMESTAMP, server_default=0db.func.current_timestamp(), nullable=False)
-    #timestamp = db.Column(db.DateTime, nullable=False, default=func.now())
-    timestamp = db.Column(db.String(20), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     sender_id = db.Column(db.Integer, nullable=False)
     sender_username = db.Column(db.String(50), nullable=False)
     room_id = db.Column(db.String(50), db.ForeignKey('messages.room_id'), nullable=False)
