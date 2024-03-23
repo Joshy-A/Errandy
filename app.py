@@ -1,8 +1,11 @@
 from myapp import create_app
 from myapp.database import db, Message, ChatMessage
 from flask_socketio import emit, join_room, leave_room
+from flask import Flask
+from config import Config
 
 app, socket = create_app()
+app.config.from_object(Config)
 
 
 # COMMUNICATION ARCHITECTURE
